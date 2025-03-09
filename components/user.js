@@ -29,7 +29,8 @@ exports.userReg = async (req, res) => {
             //Performing validations
             if (validator.emailValidation(newUser.emailId) &&
                 validator.passwordValidation(newUser.password) &&
-                validator.notNull(newUser.firstName)) {
+                validator.notNull(newUser.firstName)
+            ) {
                 //Bcrypt password encription
                 const salt = await bcrypt.genSalt(10);
                 newUser.password = await bcrypt.hash(newUser.password, salt)

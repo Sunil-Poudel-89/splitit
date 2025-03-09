@@ -77,6 +77,7 @@ export const settlementService = async(data, setAlert, setAlertMessage) => {
         return settle_details
     }catch(err){
         setAlert(true)
+        console.log("Error", err)
         err.response.status === 400 || err.response.status === 401
         ? setAlertMessage(err.response.data.message) : setAlertMessage("Oops! Something went worng")
         return false
