@@ -42,10 +42,6 @@ const User = new mongoose.Schema({
         },
         required: true,
         unique: true
-    },
-    notificationToken: {
-        type: String,
-        required: true,
     }
 })
 
