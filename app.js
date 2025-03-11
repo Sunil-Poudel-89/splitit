@@ -11,6 +11,7 @@ dotenv.config()
 var usersRouter = require('./routes/userRouter')
 var gorupRouter = require('./routes/groupRouter')
 var expenseRouter = require('./routes/expenseRouter')
+var notificationRouter = require("./routes/notificationRouter")
 
 var app = express()
 app.use(cors())
@@ -20,6 +21,7 @@ app.use(requestLogger)
 app.use('/api/users', usersRouter)
 app.use('/api/group', apiAuth.validateToken,gorupRouter)
 app.use('/api/expense', apiAuth.validateToken,expenseRouter)
+app.use('/api/notification', notificationRouter)
 
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
     app.use(express.static('client/build'));

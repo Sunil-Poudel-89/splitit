@@ -2,6 +2,7 @@ const model = require('../model/schema')
 const validator = require('../helper/validation');
 const logger = require('../helper/logger');
 const gorupDAO = require('./group')
+const notificationService = require('./notification');
 
 /*
 Add Expense function
@@ -51,6 +52,22 @@ exports.addExpense = async (req, res) => {
 
             //New expense is created now we need to update the split values present in the group 
             var update_response = await gorupDAO.addSplit(expense.groupId, expense.expenseAmount, expense.expenseOwner, expense.expenseMembers)
+
+            const emailsToNotify = [...new Set([expense.expenseOwner, ...expense.expenseMembers])];
+            
+            // Send the notification
+            await notificationService.sendNotification(
+                emailsToNotify,
+                `New Expense: ${expense.expenseName}`,
+                `${expense.expenseOwner} added an expense of ${expense.expenseCurrency} ${expense.expenseAmount} in ${group.groupName}`,
+                {
+                    type: 'NEW_EXPENSE',
+                    expenseId: newExpense._id.toString(),
+                    groupId: expense.groupId,
+                    amount: expense.expenseAmount.toString(),
+                    currency: expense.expenseCurrency
+                }
+            );
 
             res.status(200).json({
                 status: "Success",

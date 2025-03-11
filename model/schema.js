@@ -150,6 +150,35 @@ const Settlement = new mongoose.Schema({
     }
 })
 
+
+const deviceTokenSchema = new mongoose.Schema({
+    email: {
+        type: String,
+        required: true,
+    },
+    token: {
+        type: String,
+        required: true,
+    },
+    platform: {
+        type: String,
+        enum: ['ios', 'android', 'web'],
+        required: true,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now,
+    }
+});
+
+// Create a compound index to ensure email + token combination is unique
+deviceTokenSchema.index({ email: 1, token: 1 }, { unique: true });
+
+module.exports.DeviceToken = mongoose.model('DeviceToken', deviceTokenSchema);
 module.exports.Expense = mongoose.model('expense', Expense)
 module.exports.User = mongoose.model('user', User)
 module.exports.Group = mongoose.model('group', Group)
